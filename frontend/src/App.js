@@ -9,32 +9,18 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import withFirebaseAuth from 'react-with-firebase-auth'
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
-import firebaseConfig from './components/firebaseConfig';
-
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-
-const firebaseAppAuth = firebaseApp.auth();
-const providers = {
-  googleProvider: new firebase.auth.GoogleAuthProvider(),
-};
+import UserProvider from "./UserProvider"
 
 function App(props) {
-  const {
-    user,
-    signOut,
-    signInWithGoogle,
-  } = props;
 
   return (
     <>
+    <UserProvider>
       <Navbar />
       <Router>
         <Switch>
           <Route exact path="/">
-            <Login user={user} signOut={signOut} signInWithGoogle={signInWithGoogle}/>
+            <Login />
           </Route>
           <Route exact path="/chat">
             <ChatWindow />
@@ -44,12 +30,9 @@ function App(props) {
           </Route>
         </Switch>
       </Router>
-      
+    </UserProvider>
     </>
   );
 }
 
-export default withFirebaseAuth({
-  providers,
-  firebaseAppAuth,
-})(App);
+export default App
