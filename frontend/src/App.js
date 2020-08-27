@@ -1,12 +1,29 @@
 import React from 'react';
 import Navbar from "./components/Navbar"
-import Chat from "./components/ChatWindow"
+import ChatWindow from "./components/ChatWindow"
+import Dashboard from "./components/Dashboard"
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 function App() {
   return (
     <>
       <Navbar />
-      <Chat />
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <ChatWindow />
+          </Route>
+          <Route exact path="/dashboard">
+            <Dashboard />
+          </Route>
+        </Switch>
+      </Router>
+      
     </>
   );
 }

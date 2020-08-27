@@ -7,21 +7,9 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
+import { Link, HashRouter as Router } from "react-router-dom";
 
 export default function MenuAppBar() {
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -34,14 +22,11 @@ export default function MenuAppBar() {
   };
 
   return (
-    <div className={classes.root}>
+    <>
       <AppBar position="static">
         <Toolbar>
           <div>
               <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
                 onClick={handleMenu}
                 color="inherit"
               >
@@ -61,16 +46,24 @@ export default function MenuAppBar() {
                 }}
                 open={open}
                 onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Home</MenuItem>
-                <MenuItem onClick={handleClose}>Calories</MenuItem>
+              > 
+              <Router>
+                <Link style={{ color: 'inherit', textDecoration: 'inherit'}} to="/">
+                  <MenuItem onClick={handleClose}>Home</MenuItem>
+                </Link>
+                
+                ]<Link style={{ color: 'inherit', textDecoration: 'inherit'}} to="/dashboard">
+                  <MenuItem onClick={handleClose}>Calories</MenuItem>
+                </Link>
+              </Router>
               </Menu>
+              
             </div>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6">
             Diet with MEEEEE
           </Typography>
         </Toolbar>
       </AppBar>
-    </div>
+    </>
   );
 }
