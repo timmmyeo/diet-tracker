@@ -48,11 +48,15 @@ export default function MenuAppBar() {
                 onClose={handleClose}
               > 
               <Router>
-                <Link style={{ color: 'inherit', textDecoration: 'inherit'}} to="/">
+              <Link style={{ color: 'inherit', textDecoration: 'inherit'}} to="/">
                   <MenuItem onClick={handleClose}>Home</MenuItem>
                 </Link>
+
+                <Link style={{ color: 'inherit', textDecoration: 'inherit'}} to="/chat">
+                  <MenuItem onClick={handleClose}>Chat</MenuItem>
+                </Link>
                 
-                ]<Link style={{ color: 'inherit', textDecoration: 'inherit'}} to="/dashboard">
+                <Link style={{ color: 'inherit', textDecoration: 'inherit'}} to="/dashboard">
                   <MenuItem onClick={handleClose}>Calories</MenuItem>
                 </Link>
               </Router>
