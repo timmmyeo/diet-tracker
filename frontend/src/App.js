@@ -5,8 +5,8 @@ import Chat from "./components/Chat"
 function App() {
   return (
     <>
-    <Navbar />
-    <Chat />
+      <Navbar />
+      <Chat />
     </>
   );
 }
