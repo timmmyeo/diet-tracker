@@ -8,6 +8,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Link, HashRouter as Router } from "react-router-dom";
+import { UserContext } from "../UserProvider"
 
 export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -20,6 +21,8 @@ export default function MenuAppBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const user = React.useContext(UserContext)
 
   return (
     <>
@@ -65,6 +68,13 @@ export default function MenuAppBar() {
             </div>
           <Typography variant="h6">
             Diet with MEEEEE
+          </Typography>
+          <Typography>
+          {
+            user 
+              ? <p>Hello, {user.displayName}</p>
+              : <p>Please sign in.</p>
+          }
           </Typography>
         </Toolbar>
       </AppBar>

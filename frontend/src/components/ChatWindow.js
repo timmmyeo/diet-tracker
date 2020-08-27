@@ -14,8 +14,8 @@ import { UserContext } from "../UserProvider"
 
 
 export default function ChatWindow(props) {
-  // const user = React.useContext(UserContext)
-  const user = firebase.auth().currentUser
+  const user = React.useContext(UserContext)
+  // const user = firebase.auth().currentUser
   const db = firebase.firestore();
 
   function Add() {
