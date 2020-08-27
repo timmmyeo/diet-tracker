@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from "./components/Navbar"
 import ChatWindow from "./components/ChatWindow"
 import Dashboard from "./components/Dashboard"
+import Login from "./components/Login"
 import {
   HashRouter as Router,
   Switch,
@@ -16,6 +17,9 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/">
+            <Login />
+          </Route>
+          <Route exact path="/chat">
             <ChatWindow />
           </Route>
           <Route exact path="/dashboard">
