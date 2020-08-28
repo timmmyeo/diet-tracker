@@ -69,11 +69,11 @@ export default function MenuAppBar() {
           <Typography variant="h6">
             Diet with MEEEEE
           </Typography>
-          <Typography>
+          <Typography variant="h6">
           {
             user 
-              ? <p>Hello, {user.displayName}</p>
-              : <p>Please sign in.</p>
+              ? <> | Hello, {user.displayName}</>
+              : <> | Please sign in.</>
           }
           </Typography>
         </Toolbar>

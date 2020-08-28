@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { ThemeProvider,
          Message,
          MessageGroup,
@@ -14,38 +14,64 @@ import { UserContext } from "../UserProvider"
 
 
 export default function ChatWindow(props) {
-  const user = React.useContext(UserContext)
+  const user = useContext(UserContext)
   const db = firebase.firestore();
 
-  const [messages, setMessages] = React.useState([])
+  const [messages, setMessages] = useState([])
 
-  let messageComponents = messages.map(msg => {
-    return (
-      <Grid key={msg.id} item xs={12}>
-        <ChatBubble 
-          text={msg.data.message}
-          isOwn={msg.data.isUser}
-        />
-      </Grid>
-    )
-  })
+  // let messageComponents = messages.map(msg => {
+  //   return (
+  //     <Grid key={msg.id} item xs={12}>
+  //       <ChatBubble 
+  //         text={msg.data.message}
+  //         isOwn={msg.data.isUser}
+  //       />
+  //     </Grid>
+  //   )
+  // })
+  let messageComponents = <h1>Loading...</h1>;
 
-  if (user) {
-    console.log("We are reading!")
-    const chatCollection = db.collection("users").doc(user.uid).collection("chat");
-    
-    let tempState = []
-    chatCollection.orderBy("timestamp").get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(msg) {
-            tempState.push({id: msg.id, data: msg.data()})
-        });
-        setMessages(tempState);
+  useEffect(() => {
+    let unsubscribe = () =>{}
+    if (user) {
+      console.log("We are reading!")
+      const chatCollection = db.collection("users").doc(user.uid).collection("chat").orderBy("timestamp");
+      unsubscribe = chatCollection.onSnapshot(snap => {
+        const data = snap.map(doc => doc.data());
+        setMessages(data);
+      });
+      console.log("We have finished reading!");
+    }
+    else {
+      console.log("Loading data...");
+    }
+
+    messageComponents = messages.map(msg => {
+      return (
+        <Grid key={msg.id} item xs={12}>
+          <ChatBubble 
+            text={msg.data.message}
+            isOwn={msg.data.isUser}
+          />
+        </Grid>
+      )
     })
-    .catch(function(error) {
-      console.log("Some error happened when getting the collection...");
-    });
-  } 
+
+    return () => unsubscribe();
+  }, [user]);
+
+  // if (user) {
+    
+    
+    
+  //   let tempState = []
+  //   chatCollection.orderBy("timestamp").onSnapshot(function(querySnapshot) {
+  //     querySnapshot.forEach(function(msg) {
+  //         tempState.push({id: msg.id, data: msg.data()})
+  //     });
+  //     setMessages(tempState);
+  // });
+  // } 
   
 
   function Add() {
