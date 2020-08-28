@@ -21,14 +21,32 @@ export default function ChatWindow(props) {
 
   let messageComponents = messages.map(msg => {
     return (
-      <Grid item xs={12}>
+      <Grid key={msg.id} item xs={12}>
         <ChatBubble 
-          text={msg.message}
-          isOwn={msg.isUser}
+          text={msg.data.message}
+          isOwn={msg.data.isUser}
         />
       </Grid>
     )
   })
+
+  if (user) {
+    console.log("We are reading!")
+    const chatCollection = db.collection("users").doc(user.uid).collection("chat");
+    
+    let tempState = []
+    chatCollection.get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(msg) {
+            tempState.push({id: msg.id, data: msg.data()})
+        });
+        setMessages(tempState);
+    })
+    .catch(function(error) {
+      console.log("Some error happened when getting the collection...");
+    });
+  } 
+  
 
   function Add() {
     alert(user.uid)
@@ -55,7 +73,7 @@ export default function ChatWindow(props) {
     chatCollection.get()
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(msg) {
-            tempState.push(msg.data())
+            tempState.push({id: msg.id, data: msg.data()})
         });
         setMessages(tempState);
     })
@@ -68,12 +86,7 @@ export default function ChatWindow(props) {
   return (
     <>
     <Grid container>
-
-
-      
       {messageComponents}
-      
-
     </Grid>
     <button onClick={Add}>Add random information to database</button>
     <button onClick={Read}>Read from database</button>
