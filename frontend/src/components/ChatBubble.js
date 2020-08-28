@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "lightGrey",
     padding: "10px",
     borderRadius: "25px",
+    float: "left",
   },
 }));
 
@@ -20,7 +21,7 @@ export default function ChatBubble(props) {
     <>
       <Typography 
         className={classes.bubble}
-        style={props.isOwn && {float: "right", backgroundColor: "purple", color: "white"}}
+        style={props.isOwn ? {float: "right", backgroundColor: "purple", color: "white"} : null}
         display="inline"
         variant="body1"
         
