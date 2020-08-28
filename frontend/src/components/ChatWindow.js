@@ -20,10 +20,12 @@ export default function ChatWindow(props) {
 
   function Add() {
     alert(user.uid)
-    db.collection("users").add({
-        first: "Ada",
-        last: "Lovelace",
-        born: 1815
+    const currTime = firebase.firestore.FieldValue.serverTimestamp();
+    db.collection("users").doc(user.uid).collection("chat").add({
+      isUser: 1,
+      message: "Test message",
+      timestamp: currTime,
+
     })
     .then(function(docRef) {
         console.log("Document written with ID: ", docRef.id);
