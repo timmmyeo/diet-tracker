@@ -34,6 +34,18 @@ export default function ChatWindow(props) {
         console.log("Error adding document: ", error);
     });
   }
+  
+  function Read() {
+    console.log("We are reading!")
+    const chatCollection = db.collection("users").doc(user.uid).collection("chat");
+    
+    chatCollection.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(msg) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(msg.id, " => ", msg.data());
+        });
+    });
+  }
 
   return (
     <>
@@ -55,6 +67,7 @@ export default function ChatWindow(props) {
 
     </Grid>
     <button onClick={Add}>Add random information to database</button>
+    <button onClick={Read}>Read from database</button>
 
     <form noValidate autoComplete="off">
         <TextField 
