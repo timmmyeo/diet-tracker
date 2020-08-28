@@ -35,7 +35,7 @@ export default function ChatWindow(props) {
     const chatCollection = db.collection("users").doc(user.uid).collection("chat");
     
     let tempState = []
-    chatCollection.get()
+    chatCollection.orderBy("timestamp").get()
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(msg) {
             tempState.push({id: msg.id, data: msg.data()})
@@ -49,10 +49,9 @@ export default function ChatWindow(props) {
   
 
   function Add() {
-    alert(user.uid)
     const currTime = firebase.firestore.FieldValue.serverTimestamp();
     db.collection("users").doc(user.uid).collection("chat").add({
-      isUser: true,
+      isUser: false,
       message: "Test message",
       timestamp: currTime,
 
@@ -64,32 +63,13 @@ export default function ChatWindow(props) {
         console.log("Error adding document: ", error);
     });
   }
-  
-  function Read() {
-    console.log("We are reading!")
-    const chatCollection = db.collection("users").doc(user.uid).collection("chat");
-    
-    let tempState = []
-    chatCollection.get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(msg) {
-            tempState.push({id: msg.id, data: msg.data()})
-        });
-        setMessages(tempState);
-    })
-    .catch(function(error) {
-      console.log("Some error happened when getting the collection...");
-    });
-
-  }
 
   return (
     <>
     <Grid container>
       {messageComponents}
     </Grid>
-    <button onClick={Add}>Add random information to database</button>
-    <button onClick={Read}>Read from database</button>
+    <button onClick={Add}>Generate bot response!</button>
 
     <form noValidate autoComplete="off">
         <TextField 
