@@ -17,38 +17,9 @@ export default function ChatWindow(props) {
   const user = React.useContext(UserContext)
   const db = firebase.firestore();
 
-  const [messages, setMessages] = React.useState([
-    {
-      isUser: true,
-      message: "test1",
-    },
-    {
-      isUser: false,
-      message: "Test2 (bot)",
-    },
-    {
-      isUser: false,
-      message: "test3"
-    },
-    {
-      isUser:false,
-      message: "test4"
-    },
-    {
-      isUser: true,
-      message: "test1",
-    },
-    {
-      isUser: true,
-      message: "test1",
-    },
-    {
-      isUser: true,
-      message: "test1",
-    },
-  ])
+  const [messages, setMessages] = React.useState([])
 
-  const messageComponents = messages.map(msg => {
+  let messageComponents = messages.map(msg => {
     return (
       <Grid item xs={12}>
         <ChatBubble 
@@ -80,16 +51,18 @@ export default function ChatWindow(props) {
     console.log("We are reading!")
     const chatCollection = db.collection("users").doc(user.uid).collection("chat");
     
+    let tempState = []
     chatCollection.get()
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(msg) {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(msg.id, " => ", msg.data());
+            tempState.push(msg.data())
         });
+        setMessages(tempState);
     })
     .catch(function(error) {
       console.log("Some error happened when getting the collection...");
     });
+
   }
 
   return (
