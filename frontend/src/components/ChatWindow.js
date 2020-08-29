@@ -17,17 +17,10 @@ export default function ChatWindow(props) {
   const user = useContext(UserContext)
   const db = firebase.firestore();
 
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      data: {
-        message: "Loading data...",
-        isOwn: false
-      }
-    }
-  ])
+  const [messages, setMessages] = useState([])
 
-  let messageComponents = messages.map(msg => {
+  let messageComponents = messages.length == 0 ? <h1>Loading data...</h1> :
+    messages.map(msg => {
     return (
       <Grid key={msg.id} item xs={12}>
         <ChatBubble 
@@ -37,7 +30,6 @@ export default function ChatWindow(props) {
       </Grid>
     )
   })
-  // let messageComponents = <h1>Loading...</h1>;
 
   useEffect(() => {
     let unsubscribe = () =>{}
@@ -46,10 +38,19 @@ export default function ChatWindow(props) {
       const chatCollection = db.collection("users").doc(user.uid).collection("chat").orderBy("timestamp");
       unsubscribe = chatCollection.onSnapshot(snap => {
         const data = [];
-        snap.forEach(doc => {
-          data.push({id: doc.id, data: doc.data()});
+        snap.docChanges().forEach(change => {
+          if (change.type === "added") {
+            data.push({id: change.doc.id, data: change.doc.data()});
+          }
+          // if (change.type === "modified") {
+          //   data.push({id: change.doc.id, data: change.doc.data()});
+          // }
+          // if (change.type === "removed") {
+          //   data.push({id: change.doc.id, data: change.doc.data()});
+          // }
+          
         })
-        setMessages(data);
+        setMessages(oldData => [...oldData, ...data]);
       });
       console.log("We have finished reading!");
     }
@@ -68,7 +69,10 @@ export default function ChatWindow(props) {
     //   )
     // })
 
-    return () => unsubscribe();
+    return () => {
+      console.log("Cleaning up!");
+      unsubscribe();
+    }
   }, [user]);
 
   // if (user) {
